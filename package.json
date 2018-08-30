@@ -1,0 +1,22 @@
+{
+  "name": "linkreadermd",
+  "version": "1.0.0",
+  "description": "## Preámbulo",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gloryarz/cdmx-2018-01-FE-markdown.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gloryarz/cdmx-2018-01-FE-markdown/issues"
+  },
+  "homepage": "https://github.com/gloryarz/cdmx-2018-01-FE-markdown#readme",
+  "devDependencies": {
+    "jest": "^23.5.0"
+  }
+}
