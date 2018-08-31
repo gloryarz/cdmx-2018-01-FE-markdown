@@ -10,15 +10,38 @@ const read = (callBack) => {
     })
 };
 
+/*
 read( callBack = (data) => {
     // console.log(data)
     let file = data;
-    let search = /\[.{2,}\]\(.{2,}\)\W/g
+    let search = /\[.*\]\(https?:.*\)/g;
     let searching = file.match(search);
-    console.log(searching) 
+    // console.log(searching) 
+
+    searching.forEach(element => {
+        let name = /\[.*\]/g;
+        let urls = /\(https?:.*\)/g;
+        let getName = element.match(name);
+        let geturls = element.match(urls)
+        //console.log(getName)
+        console.log(__filename, geturls, getName)
+    });
 
 });
+*/
 
+read( callBack = (data) => {
+    // console.log(data)
+    let file = data;
+    let search = /\bhttps?:.*\b/g;
+    let searching = file.match(search);
+    // console.log(searching) 
+    
+    searching.forEach(element => {
+        console.log(__filename, element)
+    });
+
+});
 
 
 module.exports = {
