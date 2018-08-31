@@ -11,7 +11,11 @@ const read = (callBack) => {
 };
 
 read( callBack = (data) => {
-     console.log(data)
+    // console.log(data)
+    let file = data;
+    let search = /\[.{2,}\]\(.{2,}\)\W/g
+    let searching = file.match(search);
+    console.log(searching) 
 
 });
 
