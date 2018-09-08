@@ -1,26 +1,29 @@
 const fs = require('fs');
 
-const read = (callBack) => {
+const read = (errCallBack, callBack) => {
     fs.readFile('./links.md', 'utf8', (err, data) => {
         if (err) {
-            console.log('Tienes un error');
+            errCallBack(err)
         } else {
             callBack(data)
         }
     })
 };
 
-
-read( callBack = (data) => {
+let arr = []
+read( (err) => console.log(err), callBack = (data) => {
     let file = data;
     let search = /\[.*https?:.*\)/ig;
     let searching = file.match(search);
 
     searching.forEach(element => {
-        console.log(element)
+        element = element.replace(/.$/, '');
+        element = element.replace(/^\[/, '');
+        element = element.split(/\]\(/);
+        arr.push(element)
+       
     });
 });
-
 
 /*
 read( callBack = (data) => {
