@@ -18,5 +18,8 @@
   "homepage": "https://github.com/gloryarz/cdmx-2018-01-FE-markdown#readme",
   "devDependencies": {
     "jest": "^23.5.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.2.0"
   }
 }

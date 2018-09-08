@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 const read = (errCallBack, callBack) => {
     fs.readFile('./links.md', 'utf8', (err, data) => {
@@ -21,9 +22,22 @@ read( (err) => console.log(err), callBack = (data) => {
         element = element.replace(/^\[/, '');
         element = element.split(/\]\(/);
         arr.push(element)
-       
     });
+    fetching();
 });
+
+const fetching  = () => {
+    arr.forEach(element => {
+        let url = element[1];
+        fetch(url)
+        .then(res => console.log(res.url, res.status, res.statusText))
+    });
+
+    
+    
+
+}
+
 
 /*
 read( callBack = (data) => {
@@ -44,5 +58,5 @@ read( callBack = (data) => {
 
 
 module.exports = {
-    read
+    read, fetching
 };
