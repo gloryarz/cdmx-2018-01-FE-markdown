@@ -2,7 +2,7 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const path = require('path');
 
-const filePath = './links.md';
+const filePath = './README.md';
 
 const absolutePath = path.resolve(filePath);
 
@@ -73,6 +73,42 @@ const fetching = (data) => {
   });
 };
 
+const broken = (data) => {
+  return new Promise((resolve, reject) => {
+    resolve(data);
+    let counter = 0;
+    data.forEach(obj => { 
+      fetch(obj.url)
+        .then(res => {
+          const statusText = res.statusText;
+          if (statusText !== 'OK') {
+            counter++;
+          }
+          return counter;
+        })
+        .then(data => console.log('Broken: ' + data))
+        .catch(err => console.log(err));
+    });
+  });
+};
+
+const stats = (data) => {
+  return new Promise(() => {
+    let totalLinks = data.length;
+    let uniqueLinks = [];
+    let allLinks = [];
+    data.forEach(links => {
+      allLinks.push(links.url);
+    });
+    for (let i = 0; i < allLinks.length; i++) {
+      if (uniqueLinks.indexOf(allLinks[i]) === -1) {
+        uniqueLinks.push(allLinks[i]);
+      }
+    }
+    console.log('Total: ' + totalLinks);
+    console.log('Unique: ' + uniqueLinks.length);
+  });
+};
 
 const userValue = 'options';
 const promises = Promise.all([isAnMDFile(), readMDFile()])
@@ -93,17 +129,24 @@ if (userValue === 'options') {
     .then(data => console.log(data))
     .catch(err => console.log(err));
 } else if (userValue === 'stats') {
-
+  promises.then(data => stats(data))
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+} else if (userValue === 'statsvalidate') {
+  promises.then(data => broken(data))
+    .then(data => stats(data))
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
 }
 
 
-/*
-
 module.exports = {
+  isAnMDFile,  
   readMDFile, 
   getData,
   fetching,
-  fetchResult,
-  options
+  broken,
+  options,
+  stats
 
-};*/
+};
