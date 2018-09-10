@@ -47,62 +47,45 @@ const getData = (data) => {
 const getOptions = (data) => {
   return new Promise(() => {
     data.forEach(element =>{
-        const hrefText = element[0];
-        const href = element[1]
-        console.log(absolutePath, href, hrefText);
-    })
+      const hrefText = element[0].slice(0, 50);
+      const href = element[1];
+      console.log(absolutePath, href, hrefText);
+    });
   });
 };
 
-Promise.all([isAnMDFile(), readMDFile()])
-  .then(data => data)
-  .then(data => getData(data))
-  .then(data => getOptions(data))
-  .then(data => console.log(data))
-  .catch(err => console.log(err));
-
-
-/*
-isAnMDFile().then(data => data)
-.then(function(data){
-    return readMDFile(data)
-})
-.then(data => console.log(data))
-  .catch(err => console.log(err));
-*/
-
-/*
-readMDFile.then(data => console.log(data))
-  .catch(err => console.log(err));
-*/
-
-/*
-const readMDFile = () => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      getData(data);
-      console.log('readMDFile');
-    }
+const fetching = (data) => {
+  return new Promise((resolve, reject) => {
+    data.forEach(element => {
+      let url = element[1];
+      fetch(url)
+        .then(res => console.log(res.url, res.status, res.statusText))
+        .catch(err => console.log(err));
+    });
   });
 };
 
-let arr = [];
-const getData = (data) => {
-  let file = data;
-  let search = /\[.*https?:.*\)/ig;
-  let searching = file.match(search);
 
-  searching.forEach(hrefAndText => {
-    hrefAndText = hrefAndText.replace(/.$/, '');
-    hrefAndText = hrefAndText.replace(/^\[/, '');
-    hrefAndText = hrefAndText.split(/\]\(/);
-    arr.push(hrefAndText);
-  });
-  console.log('getData');
-  fetching();
-};
+const userValue = 'optionspo';
+if (userValue == 'options') {
+  Promise.all([isAnMDFile(), readMDFile()])
+    .then(data => data)
+    .then(data => getData(data))
+    .then(data => getOptions(data))
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+} else {
+  Promise.all([isAnMDFile(), readMDFile()])
+    .then(data => data)
+    .then(data => getData(data))
+    .then(data => fetching(data))
+    .then(data => console.log(data))
+    .catch(err => console.log(err));
+}
+
+
+/*
+
 
 const fetching = () => {
   arr.forEach(element => {
