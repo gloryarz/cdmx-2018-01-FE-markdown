@@ -4,7 +4,6 @@ const path = require('path');
 
 const filePath = './links.md';
 
-
 const absolutePath = path.resolve(filePath);
 
 const isAnMDFile = () => {
@@ -17,12 +16,11 @@ const isAnMDFile = () => {
   });
 };
 
-
 const readMDFile = () => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
-        reject(err);
+        reject('Hay un problema para leer tu archivo', err);
       } else {
         resolve(data);
       }
@@ -30,30 +28,48 @@ const readMDFile = () => {
   });
 };
 
+const getData = (data) => {
+  return new Promise((resolve, reject) => {
+    const file = data;
+    const search = /\[.*https?:.*\)/ig;
+    const searching = file[1].match(search);
+    const arr = []; 
+    searching.forEach(hrefAndText => {
+      hrefAndText = hrefAndText.replace(/.$/, '');
+      hrefAndText = hrefAndText.replace(/^\[/, '');
+      hrefAndText = hrefAndText.split(/\]\(/);
+      arr.push(hrefAndText);
+    });
+    resolve(arr);
+  });  
+};
+
+const getOptions = (data) => {
+  return new Promise(() => {
+    data.forEach(element =>{
+        const hrefText = element[0];
+        const href = element[1]
+        console.log(absolutePath, href, hrefText);
+    })
+  });
+};
+
+Promise.all([isAnMDFile(), readMDFile()])
+  .then(data => data)
+  .then(data => getData(data))
+  .then(data => getOptions(data))
+  .then(data => console.log(data))
+  .catch(err => console.log(err));
+
 
 /*
-
-const isAnMDFile = new Promise((resolve, reject) => {
-  if (filePath.includes('.md')) {
-    resolve(filePath);
-  } else {
-    reject('No es un archivo .md');
-  }
-});
-
-const getData = new Promise((resolve, reject) => {
-    let file = data;
-    let search = /\[.*https?:.*\)/ig;
-    let searching = file.match(search); 
-    resolve(searching);  
-});*/
-
 isAnMDFile().then(data => data)
 .then(function(data){
     return readMDFile(data)
 })
 .then(data => console.log(data))
   .catch(err => console.log(err));
+*/
 
 /*
 readMDFile.then(data => console.log(data))
