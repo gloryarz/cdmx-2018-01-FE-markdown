@@ -1,9 +1,10 @@
-const { read } = require('../app');
+const { isAnMDFile, readMDFile, getData, fetching, broken, stats } = require('../app');
 
-describe('read, Es una función', () => {
-    test('Es una función', () => {
-        const read = jest.fn()
-        read()
-        expect(read).toHaveBeenCalled()
-    });
+describe('isAnMDFile, verifica que sea un archivo .md', () => {
+  test('README.MD es un archivo md', () => {
+    expect(isAnMDFile('README.md')).toBeTruthy();
+  });
+  test('README.MD es un archivo md', () => {
+    expect(isAnMDFile('hola')).toBe('No es un archivo .md');
+  });
 });

@@ -1,7 +1,7 @@
 {
-  "name": "linkreadermd",
+  "name": "md-links",
   "version": "1.0.0",
-  "description": "## Preámbulo",
+  "description": "Este módulo lee tus archivos .md, revisa que los links no estén rotos",
   "main": "index.js",
   "scripts": {
     "test": "jest"
@@ -10,13 +10,16 @@
     "type": "git",
     "url": "git+https://github.com/gloryarz/cdmx-2018-01-FE-markdown.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Gloria Rivera",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/gloryarz/cdmx-2018-01-FE-markdown/issues"
   },
   "homepage": "https://github.com/gloryarz/cdmx-2018-01-FE-markdown#readme",
   "devDependencies": {
     "jest": "^23.5.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.2.0"
   }
 }
