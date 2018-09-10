@@ -2,11 +2,11 @@ const fs = require('fs');
 const fetch = require('node-fetch');
 const path = require('path');
 
-const filePath = './README.md';
+const filePath = '';
 
 const absolutePath = path.resolve(filePath);
 
-const isAnMDFile = () => {
+const isAnMDFile = (filePath) => {
   return new Promise((resolve, reject) => {
     if (filePath.includes('.md')) {
       resolve(filePath);
@@ -111,7 +111,7 @@ const stats = (data) => {
 };
 
 const userValue = 'options';
-const promises = Promise.all([isAnMDFile(), readMDFile()])
+const promises = Promise.all([isAnMDFile(filePath), readMDFile()])
   .then(data => data)
   .then(data => getData(data))
   .then(data => getOptions(data));
@@ -146,7 +146,6 @@ module.exports = {
   getData,
   fetching,
   broken,
-  options,
   stats
 
 };
