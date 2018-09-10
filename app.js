@@ -45,82 +45,59 @@ const getData = (data) => {
 };
 
 const getOptions = (data) => {
-  return new Promise(() => {
-    data.forEach(element =>{
+  return new Promise((resolve, reject) => {
+    const arrObj = [];   
+    data.forEach(element =>{ 
       const hrefText = element[0].slice(0, 50);
       const href = element[1];
-      console.log(absolutePath, href, hrefText);
+      const result = {
+        path: absolutePath,
+        url: href,
+        urlTxt: hrefText
+      };
+      arrObj.push(result);
     });
+    resolve(arrObj);
   });
 };
 
 const fetching = (data) => {
-  return new Promise((resolve, reject) => {
-    data.forEach(element => {
-      let url = element[1];
-      fetch(url)
-        .then(res => console.log(res.url, res.status, res.statusText))
+  return new Promise(() => {
+    data.forEach(obj => {
+      const path = obj.path; 
+      const urlTxt = obj.urlTxt;  
+      fetch(obj.url)
+        .then(res => console.log(path, res.url, res.status, res.statusText, urlTxt))
         .catch(err => console.log(err));
     });
   });
 };
 
 
-const userValue = 'optionspo';
-if (userValue == 'options') {
-  Promise.all([isAnMDFile(), readMDFile()])
-    .then(data => data)
-    .then(data => getData(data))
-    .then(data => getOptions(data))
+const userValue = 'options';
+const promises = Promise.all([isAnMDFile(), readMDFile()])
+  .then(data => data)
+  .then(data => getData(data))
+  .then(data => getOptions(data));
+
+
+if (userValue === 'options') {
+  promises.then(data => {
+    data.forEach(obj => {
+      console.log(obj.path, obj.url, obj.urlTxt);
+    });
+  })
+    .catch(err => console.log(err));
+} else if (userValue === 'validate') {
+  promises.then(data => fetching(data))
     .then(data => console.log(data))
     .catch(err => console.log(err));
-} else {
-  Promise.all([isAnMDFile(), readMDFile()])
-    .then(data => data)
-    .then(data => getData(data))
-    .then(data => fetching(data))
-    .then(data => console.log(data))
-    .catch(err => console.log(err));
+} else if (userValue === 'stats') {
+
 }
 
 
 /*
-
-
-const fetching = () => {
-  arr.forEach(element => {
-    let url = element[1];
-    fetch(url)
-      .then(res => fetchResult(res.url, res.status, res.statusText))
-      .then(console.log('fetch'))
-      .catch(err => console.log(err));
-  });
-};
-
-let fetchStatus = [];
-const fetchResult = (url, status, statusText) => {
-  fetchStatus.push([url, status, statusText]);
-  console.log('fetchResult');
-};
-
-const options = () => {
-     readMDFile();
-     console.log(absolutePath, 'how', arr);
-     setTimeout((el) => {
-       console.log(absolutePath, arr);
-     }, 1000); 
-   };
-
-let userValue = 'ahhh';
-
-const userInput = () => {
-  if (userValue === 'better') {
-    console.log('better');
-  } else {
-    options();
-  }
-};
-userInput();
 
 module.exports = {
   readMDFile, 
@@ -130,124 +107,3 @@ module.exports = {
   options
 
 };*/
-
-/*
-const readMDFile = (errCallBack, callBack) => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      errCallBack(err);
-    } else {
-      callBack(data);
-    }
-  });
-};
-
-let arr = [];
-readMDFile((err) => console.log(err), callBack = (data) => {
-  let file = data;
-  let search = /\[.*https?:.*\)/ig;
-  let searching = file.match(search);
-
-  searching.forEach(hrefAndText => {
-    hrefAndText = hrefAndText.replace(/.$/, '');
-    hrefAndText = hrefAndText.replace(/^\[/, '');
-    hrefAndText = hrefAndText.split(/\]\(/);
-    arr.push(hrefAndText);
-  });
-  fetching();
-});
-
-
-const fetching = () => {
-  arr.forEach(element => {
-    let url = element[1];
-    fetch(url)
-      .then(res => fetchResult(res.url, res.status, res.statusText))
-      .catch(err => console.log(err));
-  });
-};
-
-let fetchStatus = [];
-const fetchResult = (url, status, statusText) => {
-  fetchStatus.push([url, status, statusText]);
-};
-
-*/
-
-
-// Prueba de promesas
-
-/*
-const fs = require('fs');
-const fetch = require('node-fetch');
-const path = require('path');
-
-const filePath = './links.md';
-
-
-const absolutePath = path.resolve(filePath);
-
-const readMDFile = () => {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      getData(data);
-      console.log('readMDFile');
-    }
-  });
-};
-
-let arr = [];
-const getData = (data) => {
-  let file = data;
-  let search = /\[.*https?:.*\)/ig;
-  let searching = file.match(search);
-
-  searching.forEach(hrefAndText => {
-    hrefAndText = hrefAndText.replace(/.$/, '');
-    hrefAndText = hrefAndText.replace(/^\[/, '');
-    hrefAndText = hrefAndText.split(/\]\(/);
-    arr.push(hrefAndText);
-  });
-  console.log('getData');
-  fetching();
-};
-
-const fetching = () => {
-  arr.forEach(element => {
-    let url = element[1];
-    fetch(url)
-      .then(res => fetchResult(res.url, res.status, res.statusText))
-      .then(console.log('fetch'))
-      .catch(err => console.log(err));
-  });
-};
-
-let fetchStatus = [];
-const fetchResult = (url, status, statusText) => {
-  fetchStatus.push([url, status, statusText]);
-  console.log('fetchResult');
-};
-fetchResult();
-
-const options = () => {
- // readMDFile();
-  console.log(absolutePath, 'how', arr);
-  setTimeout((el) => {
-    console.log(absolutePath, arr);
-  }, 1000); 
-};
-
-let userValue = 'ahhh';
-
-const userInput = () => {
-  if (userValue === 'better') {
-    console.log('better');
-  } else {
-    options();
-  }
-};
-userInput();
- 
- */
